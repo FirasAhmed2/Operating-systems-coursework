@@ -1,0 +1,70 @@
+ahmed@ahmed-VirtualBox:~/task1$ pwd
+/home/ahmed/task1
+ahmed@ahmed-VirtualBox:~/task1$ cd home
+bash: cd: home: No such file or directory
+ahmed@ahmed-VirtualBox:~/task1$ cd task2
+bash: cd: task2: No such file or directory
+ahmed@ahmed-VirtualBox:~/task1$ pwd
+/home/ahmed/task1
+ahmed@ahmed-VirtualBox:~/task1$ cd home
+bash: cd: home: No such file or directory
+ahmed@ahmed-VirtualBox:~/task1$ cdtask2
+cdtask2: command not found
+ahmed@ahmed-VirtualBox:~/task1$ cd task2
+bash: cd: task2: No such file or directory
+ahmed@ahmed-VirtualBox:~/task1$ pwd
+/home/ahmed/task1
+ahmed@ahmed-VirtualBox:~/task1$ cd
+ahmed@ahmed-VirtualBox:~$ pwd
+/home/ahmed
+ahmed@ahmed-VirtualBox:~$ cd task2
+ahmed@ahmed-VirtualBox:~/task2$ gcc -o word_count task2.c -ipthread
+gcc: error: task2.c: No such file or directory
+gcc: error: unrecognized command line option ‘-ipthread’; did you mean ‘-pthread’?
+gcc: fatal error: no input files
+compilation terminated.
+ahmed@ahmed-VirtualBox:~/task2$ gcc -o word_count task2.c -Ipthread
+gcc: error: task2.c: No such file or directory
+gcc: fatal error: no input files
+compilation terminated.
+ahmed@ahmed-VirtualBox:~/task2$ gcc -o word_count task2.c -Ipthread
+gcc: error: task2.c: No such file or directory
+gcc: fatal error: no input files
+compilation terminated.
+ahmed@ahmed-VirtualBox:~/task2$ gcc -o word_count task2.c -Ipthread
+/usr/bin/ld: /tmp/ccD0Ho03.o: in function `main':
+task2.c:(.text+0xae8): undefined reference to `pthread_create'
+/usr/bin/ld: task2.c:(.text+0xb3a): undefined reference to `pthread_join'
+collect2: error: ld returned 1 exit status
+ahmed@ahmed-VirtualBox:~/task2$ gcc -o word_count task2.c -pthread
+ahmed@ahmed-VirtualBox:~/task2$ ./word_count input.txt 2
+hello: 2
+sheeeee: 1
+sdasdas: 1
+ddsadasd: 1
+as: 1
+sds: 1
+ds: 3
+dsd: 1
+s: 1
+d: 1
+dsdsdsd: 1
+drug: 1
+thig: 1
+ahmed@ahmed-VirtualBox:~/task2$ ^C
+ahmed@ahmed-VirtualBox:~/task2$ gcc -o word_count task2.c -pthread
+ahmed@ahmed-VirtualBox:~/task2$ ./word_count input.txt 2
+hello: 2
+sheeeee: 1
+sdasdas: 1
+ddsadasd: 1
+as: 1
+sds: 1
+ds: 3
+dsd: 1
+s: 1
+d: 1
+dsdsdsd: 1
+drug: 1
+thig: 1
+ahmed@ahmed-VirtualBox:~/task2$

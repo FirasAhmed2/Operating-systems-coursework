@@ -1,0 +1,165 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <pthread.h>
+#include <ctype.h>
+
+#define MAX_WORDS 1000
+#define MAX_WORD_LEN 100
+
+typedef struct {
+    char word[MAX_WORD_LEN];
+    int count;
+} WordFreq;
+
+typedef struct {
+    char *segment;
+    int segment_size;
+    WordFreq *word_freq;
+    int word_count;
+} ThreadData;
+
+void *count_word_frequency(void *arg) {
+    ThreadData *data = (ThreadData *)arg;
+    char *segment = data->segment;
+    int segment_size = data->segment_size;
+    WordFreq *word_freq = data->word_freq;
+    int *word_count = &data->word_count;
+
+    char word[MAX_WORD_LEN];
+    int word_len = 0;
+
+    for (int i = 0; i < segment_size; i++) {
+        if (isalpha(segment[i]) || segment[i] == '\'') {
+            word[word_len++] = tolower(segment[i]);
+        } else if (word_len > 0) {
+            word[word_len] = '\0';
+            word_len = 0;
+
+            int found = 0;
+            for (int j = 0; j < *word_count; j++) {
+                if (strcmp(word_freq[j].word, word) == 0) {
+                    word_freq[j].count++;
+                    found = 1;
+                    break;
+                }
+            }
+
+            if (!found) {
+                strcpy(word_freq[*word_count].word, word);
+                word_freq[*word_count].count = 1;
+                (*word_count)++;
+            }
+        }
+    }
+
+    if (word_len > 0) {
+        word[word_len] = '\0';
+
+        int found = 0;
+        for (int j = 0; j < *word_count; j++) {
+            if (strcmp(word_freq[j].word, word) == 0) {
+                word_freq[j].count++;
+                found = 1;
+                break;
+            }
+        }
+
+        if (!found) {
+            strcpy(word_freq[*word_count].word, word);
+            word_freq[*word_count].count = 1;
+            (*word_count)++;
+        }
+    }
+
+    pthread_exit(NULL);
+}
+
+void merge_word_frequencies(WordFreq *final_freq, int *final_count, WordFreq *thread_freq, int thread_count) {
+    for (int i = 0; i < thread_count; i++) {
+        int found = 0;
+        for (int j = 0; j < *final_count; j++) {
+            if (strcmp(final_freq[j].word, thread_freq[i].word) == 0) {
+                final_freq[j].count += thread_freq[i].count;
+                found = 1;
+                break;
+            }
+        }
+        if (!found) {
+            strcpy(final_freq[*final_count].word, thread_freq[i].word);
+            final_freq[*final_count].count = thread_freq[i].count;
+            (*final_count)++;
+        }
+    }
+}
+
+int find_word_boundary(char *text, int position, int max_size) {
+    for (int i = position; i < max_size; i++) {
+        if (isspace(text[i]) || text[i] == '\0') {
+            return i + 1;
+        }
+    }
+    return max_size;
+}
+
+int main(int argc, char *argv[]) {
+    if (argc != 3) {
+        fprintf(stderr, "Usage: %s <filename> <N>\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    char *filename = argv[1];
+    int N = atoi(argv[2]);
+
+    FILE *file = fopen(filename, "r");
+    if (!file) {
+        perror("Failed to open file");
+        exit(EXIT_FAILURE);
+    }
+
+    fseek(file, 0, SEEK_END);
+    long file_size = ftell(file);
+    fseek(file, 0, SEEK_SET);
+
+    char *file_content = (char *)malloc(file_size + 1);
+    fread(file_content, 1, file_size, file);
+    file_content[file_size] = '\0';
+    fclose(file);
+
+    pthread_t threads[N];
+    ThreadData thread_data[N];
+    WordFreq final_freq[MAX_WORDS];
+    int final_count = 0;
+
+    int segment_size = file_size / N;
+    int start = 0;
+
+    for (int i = 0; i < N; i++) {
+        int end = (i == N - 1) ? file_size : find_word_boundary(file_content, start + segment_size, file_size);
+
+        thread_data[i].segment = file_content + start;
+        thread_data[i].segment_size = end - start;
+        thread_data[i].word_freq = (WordFreq *)malloc(MAX_WORDS * sizeof(WordFreq));
+        thread_data[i].word_count = 0;
+
+        pthread_create(&threads[i], NULL, count_word_frequency, &thread_data[i]);
+        start = end;
+    }
+
+    for (int i = 0; i < N; i++) {
+        pthread_join(threads[i], NULL);
+    }
+
+    for (int i = 0; i < N; i++) {
+        merge_word_frequencies(final_freq, &final_count, thread_data[i].word_freq, thread_data[i].word_count);
+        free(thread_data[i].word_freq);
+    }
+
+    for (int i = 0; i < final_count; i++) {
+        printf("%s: %d\n", final_freq[i].word, final_freq[i].count);
+    }
+
+    free(file_content);
+
+    return 0;
+}
