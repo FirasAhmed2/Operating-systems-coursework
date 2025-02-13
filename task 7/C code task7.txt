@@ -1,0 +1,160 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <unistd.h>
+
+#define MAX_ACCOUNTS 10  // Max accounts
+#define MAX_TRANSACTIONS 10  // Max transactions
+
+pthread_mutex_t accounts[MAX_ACCOUNTS];  // Mutex locks for accounts
+
+// Structure for a transaction
+typedef struct {
+    int from;
+    int to;
+} Transaction;
+
+// Transaction data
+Transaction transactions[MAX_TRANSACTIONS];
+int num_accounts = 0, num_transactions = 0;
+
+// Track allocation and requests for deadlock detection
+int allocation[MAX_TRANSACTIONS][MAX_ACCOUNTS] = {0};
+int request[MAX_TRANSACTIONS][MAX_ACCOUNTS] = {0};
+int available[MAX_ACCOUNTS] = {0};  // Initially, all resources (accounts) are free
+
+void read_input_file(const char* filename) {
+    FILE* file = fopen(filename, "r");
+    if (file == NULL) {
+        perror("Failed to open file");
+        exit(1);
+    }
+
+    fscanf(file, "%d", &num_accounts);  // Read number of accounts
+    fscanf(file, "%d", &num_transactions);  // Read number of transactions
+
+    printf("Number of accounts: %d\n", num_accounts);
+    printf("Number of transactions: %d\n", num_transactions);
+
+    // Initialize mutexes for accounts
+    for (int i = 0; i < num_accounts; i++) {
+        pthread_mutex_init(&accounts[i], NULL);
+    }
+
+    // Read transaction details
+    for (int i = 0; i < num_transactions; i++) {
+        fscanf(file, "%d %d", &transactions[i].from, &transactions[i].to);
+        printf("Transaction %d: Account %d to Account %d\n", i, transactions[i].from, transactions[i].to);
+    }
+
+    fclose(file);
+}
+
+// Function to simulate transaction processing
+void* transfer(void* arg) {
+    Transaction* t = (Transaction*) arg;
+    int tid = t->from;  // Use account index as thread ID
+
+    // Request resources (account from and account to)
+    printf("Transaction %d: Requesting Account %d\n", tid, t->from);
+    request[tid][t->from] = 1;  // Mark the resource request
+    pthread_mutex_lock(&accounts[t->from]);
+    allocation[tid][t->from] = 1;  // Mark as allocated
+    printf("Transaction %d: Locked Account %d\n", tid, t->from);
+
+    sleep(1);  // Simulate some processing time
+
+    printf("Transaction %d: Requesting Account %d\n", tid, t->to);
+    request[tid][t->to] = 1;  // Mark the resource request
+    pthread_mutex_lock(&accounts[t->to]);
+    allocation[tid][t->to] = 1;  // Mark as allocated
+    printf("Transaction %d: Locked Account %d\n", tid, t->to);
+
+    // Release resources after transfer (no deadlock here)
+    pthread_mutex_unlock(&accounts[t->to]);
+    pthread_mutex_unlock(&accounts[t->from]);
+
+    allocation[tid][t->from] = 0;
+    allocation[tid][t->to] = 0;
+    printf("Transaction %d: Completed\n", tid);
+
+    return NULL;
+}
+
+// Deadlock detection function
+void detect_deadlock() {
+    int finish[MAX_TRANSACTIONS] = {0};  // 0 means unfinished
+    int work[MAX_ACCOUNTS];
+
+    // Copy available resources
+    for (int i = 0; i < num_accounts; i++) work[i] = available[i];
+
+    // Try to find a process that can complete
+    int deadlock_detected = 0;
+    while (1) {
+        int found = 0;
+        for (int i = 0; i < num_transactions; i++) {
+            if (!finish[i]) { // If the process isn't finished
+                int canProceed = 1;
+                for (int j = 0; j < num_accounts; j++) {
+                    if (request[i][j] > work[j]) { // If it still needs more than available
+                        canProceed = 0;
+                        break;
+                    }
+                }
+                if (canProceed) {
+                    // Process can finish, release its resources
+                    for (int j = 0; j < num_accounts; j++)
+                        work[j] += allocation[i][j];
+                    finish[i] = 1;
+                    found = 1;
+                }
+            }
+        }
+
+        if (!found) {  // If no process can proceed, stop
+            break;
+        }
+    }
+
+    // Check for deadlock
+    printf("\nDeadlock Detection:\n");
+    for (int i = 0; i < num_transactions; i++) {
+        if (!finish[i]) {
+            printf("❌ Deadlock detected: Transaction %d is stuck.\n", i);
+            deadlock_detected = 1;
+        }
+    }
+
+    if (!deadlock_detected) {
+        printf("✅ No deadlock detected.\n");
+    }
+}
+
+int main() {
+    // Use the full path to the input file
+    read_input_file("/home/ahmed/task7/transaction.txt");
+
+    pthread_t threads[MAX_TRANSACTIONS];
+
+    // Create transaction threads
+    for (int i = 0; i < num_transactions; i++) {
+        pthread_create(&threads[i], NULL, transfer, &transactions[i]);
+    }
+
+    // Wait for a while before running deadlock detection
+    sleep(3);
+    detect_deadlock();
+
+    // Join threads (this won't happen if deadlock occurs)
+    for (int i = 0; i < num_transactions; i++) {
+        pthread_join(threads[i], NULL);
+    }
+
+    // Destroy mutexes
+    for (int i = 0; i < num_accounts; i++) {
+        pthread_mutex_destroy(&accounts[i]);
+    }
+
+    return 0;
+}

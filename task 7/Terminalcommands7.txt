@@ -1,0 +1,170 @@
+ahmed@ahmed-VirtualBox:~/task7$ ./task7
+Failed to open file: No such file or directory
+ahmed@ahmed-VirtualBox:~/task7$ ^C
+ahmed@ahmed-VirtualBox:~/task7$ gcc task7.c -o run -pthread
+ahmed@ahmed-VirtualBox:~/task7$ ./run
+Failed to open file: No such file or directory
+ahmed@ahmed-VirtualBox:~/task7$ ./run
+Failed to open file: No such file or directory
+ahmed@ahmed-VirtualBox:~/task7$ ^C
+ahmed@ahmed-VirtualBox:~/task7$ gcc task7.c -o run -pthread
+ahmed@ahmed-VirtualBox:~/task7$ ./run
+Failed to open file: No such file or directory
+ahmed@ahmed-VirtualBox:~/task7$ ./run
+Failed to open file: No such file or directory
+ahmed@ahmed-VirtualBox:~/task7$ ./transaction.txt
+bash: ./transaction.txt: No such file or directory
+ahmed@ahmed-VirtualBox:~/task7$ ^C
+ahmed@ahmed-VirtualBox:~/task7$ gcc task7.c -o run -pthread
+ahmed@ahmed-VirtualBox:~/task7$ /run
+bash: /run: Is a directory
+ahmed@ahmed-VirtualBox:~/task7$ /.run
+bash: /.run: No such file or directory
+ahmed@ahmed-VirtualBox:~/task7$ pwd
+/home/ahmed/task7
+ahmed@ahmed-VirtualBox:~/task7$ ls
+run  task7.c  transcation.txt
+ahmed@ahmed-VirtualBox:~/task7$ ./run
+
+Deadlock Detection:
+✅ No deadlock detected.
+ahmed@ahmed-VirtualBox:~/task7$ ./run
+
+Deadlock Detection:
+✅ No deadlock detected.
+ahmed@ahmed-VirtualBox:~/task7$ ^C
+ahmed@ahmed-VirtualBox:~/task7$ gcc task7.c -o run -pthread
+ahmed@ahmed-VirtualBox:~/task7$ ./run
+
+Deadlock Detection:
+✅ No deadlock detected.
+ahmed@ahmed-VirtualBox:~/task7$ ^C
+ahmed@ahmed-VirtualBox:~/task7$ gcc task7.c -o run -pthread
+ahmed@ahmed-VirtualBox:~/task7$ ./run
+
+Deadlock Detection:
+✅ No deadlock detected.
+ahmed@ahmed-VirtualBox:~/task7$ ls
+run  task7.c  transcation.txt
+ahmed@ahmed-VirtualBox:~/task7$ ^C
+ahmed@ahmed-VirtualBox:~/task7$ gcc task7.c -o run -pthread
+ahmed@ahmed-VirtualBox:~/task7$ ./run
+Failed to open file: No such file or directory
+ahmed@ahmed-VirtualBox:~/task7$ ls
+run  task7.c  transcation.txt
+ahmed@ahmed-VirtualBox:~/task7$ ./run
+Failed to open file: No such file or directory
+ahmed@ahmed-VirtualBox:~/task7$ ^C
+ahmed@ahmed-VirtualBox:~/task7$ gcc task7.c -o run -pthread
+ahmed@ahmed-VirtualBox:~/task7$ ./run
+Failed to open file: No such file or directory
+ahmed@ahmed-VirtualBox:~/task7$ ls
+run  task7.c  transcation.txt
+ahmed@ahmed-VirtualBox:~/task7$ ./run
+Failed to open file: No such file or directory
+ahmed@ahmed-VirtualBox:~/task7$ ^C
+ahmed@ahmed-VirtualBox:~/task7$ gcc task7.c -o run -pthread
+ahmed@ahmed-VirtualBox:~/task7$ ./run
+
+Deadlock Detection:
+✅ No deadlock detected.
+ahmed@ahmed-VirtualBox:~/task7$ gcc task7.c -o run -pthread
+ahmed@ahmed-VirtualBox:~/task7$ ./run
+
+Deadlock Detection:
+✅ No deadlock detected.
+ahmed@ahmed-VirtualBox:~/task7$ ^C
+ahmed@ahmed-VirtualBox:~/task7$ gcc task7.c -o run -pthread
+ahmed@ahmed-VirtualBox:~/task7$ ./run
+Number of accounts: 2
+Number of transactions: 0
+
+Checking for processes that can proceed...
+
+Deadlock Detection:
+✅ No deadlock detected.
+ahmed@ahmed-VirtualBox:~/task7$ ^C
+ahmed@ahmed-VirtualBox:~/task7$ gcc task7.c -o run -pthread
+ahmed@ahmed-VirtualBox:~/task7$ ./run
+Number of accounts: 2
+Number of transactions: 0
+
+Checking for processes that can proceed...
+
+Deadlock Detection:
+✅ No deadlock detected.
+ahmed@ahmed-VirtualBox:~/task7$ gcc task7.c -o run -pthread
+ahmed@ahmed-VirtualBox:~/task7$ ./run
+Number of accounts: 2
+Number of transactions: 0
+
+Checking for processes that can proceed...
+
+Deadlock Detection:
+✅ No deadlock detected.
+ahmed@ahmed-VirtualBox:~/task7$ ^C
+ahmed@ahmed-VirtualBox:~/task7$ gcc task7.c -o run -pthread
+ahmed@ahmed-VirtualBox:~/task7$ ./run
+Number of accounts: 2
+Number of transactions: 0
+
+Checking for processes that can proceed...
+
+Deadlock Detection:
+✅ No deadlock detected.
+ahmed@ahmed-VirtualBox:~/task7$ ^C
+ahmed@ahmed-VirtualBox:~/task7$ gcc task7.c -o run -pthread
+ahmed@ahmed-VirtualBox:~/task7$ ./run
+Number of accounts: 2
+Number of transactions: 2
+Transaction 0: Account 0 to Account 1
+Transaction 1: Account 1 to Account 0
+Transaction 1: Requesting Account 1
+Transaction 1: Locked Account 1
+Transaction 0: Requesting Account 0
+Transaction 0: Locked Account 0
+Transaction 1: Requesting Account 0
+Transaction 0: Requesting Account 1
+
+Checking for processes that can proceed...
+Process 0 can finish and releases resources.
+Process 1 can finish and releases resources.
+
+Deadlock Detection:
+✅ No deadlock detected.
+^C
+ahmed@ahmed-VirtualBox:~/task7$ gcc task7.c -o run -pthread
+ahmed@ahmed-VirtualBox:~/task7$ ./run
+Number of accounts: 2
+Number of transactions: 2
+Transaction 0: Account 0 to Account 1
+Transaction 1: Account 1 to Account 0
+Transaction 1: Requesting Account 1
+Transaction 1: Locked Account 1
+Transaction 0: Requesting Account 0
+Transaction 0: Locked Account 0
+Transaction 1: Requesting Account 0
+Transaction 0: Requesting Account 1
+
+Deadlock Detection:
+✅ No deadlock detected.
+^C
+ahmed@ahmed-VirtualBox:~/task7$ ^C
+ahmed@ahmed-VirtualBox:~/task7$ ^C
+ahmed@ahmed-VirtualBox:~/task7$ gcc task7.c -o run -pthread
+ahmed@ahmed-VirtualBox:~/task7$ ./run
+Number of accounts: 2
+Number of transactions: 2
+Transaction 0: Account 0 to Account 1
+Transaction 1: Account 1 to Account 0
+Transaction 1: Requesting Account 1
+Transaction 1: Locked Account 1
+Transaction 0: Requesting Account 0
+Transaction 0: Locked Account 0
+Transaction 1: Requesting Account 0
+Transaction 0: Requesting Account 1
+
+Deadlock Detection:
+❌ Deadlock detected: Transaction 0 is stuck.
+❌ Deadlock detected: Transaction 1 is stuck.
+^C
