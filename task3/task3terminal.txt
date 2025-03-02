@@ -1,0 +1,5 @@
+gcc task3.c -o output
+ahmed@ahmed-VirtualBox:~/task3$ ./output input.txt
+Simulation complete. Data saved to output.dat.
+ahmed@ahmed-VirtualBox:~/task3$ ^C
+ahmed@ahmed-VirtualBox:~/task3$

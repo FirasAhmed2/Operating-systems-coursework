@@ -1,0 +1,108 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+#include <string.h>
+
+#define MAX_PAGES 10000  // Maximum number of pages in the reference sequence
+
+typedef struct {
+    int page_number;
+    unsigned int age; // Age counter for aging algorithm
+} PageFrame;
+
+void simulate_aging(int num_frames, int *page_references, int num_references, FILE *output) {
+    PageFrame *frames = (PageFrame *)malloc(num_frames * sizeof(PageFrame));
+    int page_faults = 0;
+    int count = 0;
+   
+    for (int i = 0; i < num_frames; i++) {
+        frames[i].page_number = -1; // Empty frame
+        frames[i].age = 0;
+    }
+   
+    for (int i = 0; i < num_references; i++) {
+        int page = page_references[i];
+        int found = 0;
+       
+        // Age all pages
+        for (int j = 0; j < num_frames; j++) {
+            frames[j].age >>= 1;
+        }
+       
+        // Check if page is already in memory
+        for (int j = 0; j < num_frames; j++) {
+            if (frames[j].page_number == page) {
+                frames[j].age |= (1 << 31); // Set MSB as reference bit
+                found = 1;
+                break;
+            }
+        }
+       
+        if (!found) { // Page fault
+            page_faults++;
+           
+            // Find the least recently used page (smallest age)
+            int min_index = 0;
+            unsigned int min_age = UINT_MAX;
+           
+            for (int j = 0; j < num_frames; j++) {
+                if (frames[j].page_number == -1) { // Empty frame found
+                    min_index = j;
+                    break;
+                }
+                if (frames[j].age < min_age) {
+                    min_age = frames[j].age;
+                    min_index = j;
+                }
+            }
+           
+            // Replace the least recently used page
+            frames[min_index].page_number = page;
+            frames[min_index].age = (1 << 31); // Set MSB for new page
+        }
+       
+        count++;
+        if (count == 1000) {
+            fprintf(output, "%d %d\n", num_frames, page_faults);
+            count = 0;
+            page_faults = 0;
+        }
+    }
+   
+    free(frames);
+}
+
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        printf("Usage: %s <input_file>\n", argv[0]);
+        return 1;
+    }
+   
+    FILE *file = fopen(argv[1], "r");
+    if (!file) {
+        perror("Error opening file");
+        return 1;
+    }
+   
+    int page_references[MAX_PAGES];
+    int num_references = 0;
+    while (fscanf(file, "%d", &page_references[num_references]) == 1) {
+        num_references++;
+        if (num_references >= MAX_PAGES) break;
+    }
+    fclose(file);
+   
+    FILE *output = fopen("output.dat", "w");
+    if (!output) {
+        perror("Error opening output file");
+        return 1;
+    }
+   
+    for (int frames = 1; frames <= 50; frames++) {
+        simulate_aging(frames, page_references, num_references, output);
+    }
+    fclose(output);
+   
+    printf("Simulation complete. Data saved to output.dat.\n");
+    return 0;
+}
