@@ -1,0 +1,44 @@
+(No subject)
+Firas Ahmed<firasahmed2005@gmail.com>
+​
+Firasayyad@outlook.com
+​
+#include <stdio.h>
+//local page replacment
+int simulateLocalPageReplacement(int *pageRefs, int length, int numFrames) {
+    int frames[numFrames];
+    for (int i = 0; i < numFrames; i++) frames[i] = -1; // Initialize frames to -1 (empty)
+   
+    int pageFaults = 0;
+    int index = 0; // Pointer to keep track of the next frame to evict
+   
+    for (int i = 0; i < length; i++) {
+        int page = pageRefs[i];
+        int found = 0;
+       
+        // Check if the page is already in one of the frames
+        for (int j = 0; j < numFrames; j++) {
+            if (frames[j] == page) {
+                found = 1;
+                break;
+            }
+        }
+       
+        if (!found) {  // Page fault occurred
+            pageFaults++;
+            frames[index] = page;  // Replace the page
+            index = (index + 1) % numFrames;  // Move to the next frame
+        }
+    }
+    return pageFaults;
+}
+
+int main() {
+    int pageRefs[] = {0, 1, 2, 3, 0, 1, 4, 0, 1, 2};  // Example page reference string
+    int length = sizeof(pageRefs) / sizeof(pageRefs[0]);
+
+    int pageFaults = simulateLocalPageReplacement(pageRefs, length, 3);  // 3 frames
+    printf("Local Page Faults: %d\n", pageFaults);
+
+    return 0;
+}

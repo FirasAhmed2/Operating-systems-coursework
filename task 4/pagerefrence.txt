@@ -1,0 +1,48 @@
+(No subject)
+Firas Ahmed<firasahmed2005@gmail.com>
+​
+Firasayyad@outlook.com
+​
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+//page refrence string
+
+#define MAX_PAGES 10  // Set to a small number for demonstration
+
+// Function to generate a page reference string based on a Markov model
+void generatePageReferenceString(int N, float *probabilities, int *pageRefs, int length) {
+    int currentPage = rand() % N;  // Random starting page
+    pageRefs[0] = currentPage;
+   
+    for (int i = 1; i < length; i++) {
+        float randVal = (float)rand() / RAND_MAX; // Random number between 0 and 1
+        if (randVal < probabilities[currentPage]) {
+            pageRefs[i] = currentPage; // Stay at the same page
+        } else {
+            pageRefs[i] = rand() % N; // Choose a new page
+        }
+        currentPage = pageRefs[i];
+    }
+}
+
+int main() {
+    srand(time(NULL)); // Seed for random number generation
+
+    int N = 4; // Number of states (pages)
+    int length = 20; // Length of the reference string
+    float probabilities[] = {0.7, 0.6, 0.8, 0.5}; // Probabilities of staying at the same page
+
+    int pageRefs[length];
+
+    generatePageReferenceString(N, probabilities, pageRefs, length);
+
+    // Print generated page reference string
+    printf("Generated Page Reference String:\n");
+    for (int i = 0; i < length; i++) {
+        printf("%d ", pageRefs[i]);
+    }
+    printf("\n");
+
+    return 0;
+}

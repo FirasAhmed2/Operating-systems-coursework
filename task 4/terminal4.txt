@@ -1,0 +1,29 @@
+(No subject)
+Firas Ahmed<firasahmed2005@gmail.com>
+​
+Firasayyad@outlook.com
+​
+ahmed@ahmed-VirtualBox:~$ cd task4
+ahmed@ahmed-VirtualBox:~/task4$ gcc page_reference.c -o page_reference
+gcc: error: page_reference.c: No such file or directory
+gcc: fatal error: no input files
+compilation terminated.
+ahmed@ahmed-VirtualBox:~/task4$ ./page_reference
+bash: ./page_reference: No such file or directory
+ahmed@ahmed-VirtualBox:~/task4$ gcc pagerefrence.c -o pagerefrence
+ahmed@ahmed-VirtualBox:~/task4$ ./pagerefrence
+Generated Page Reference String:
+1 1 1 0 0 0 0 0 0 0 3 3 0 0 0 3 1 0 0 0
+ahmed@ahmed-VirtualBox:~/task4$ ^C
+ahmed@ahmed-VirtualBox:~/task4$ gcc local.c -o local
+ahmed@ahmed-VirtualBox:~/task4$ ./local
+Local Page Faults: 8
+ahmed@ahmed-VirtualBox:~/task4$ ^C
+ahmed@ahmed-VirtualBox:~/task4$ gcc global -o global
+gcc: error: global: No such file or directory
+gcc: fatal error: no input files
+compilation terminated.
+ahmed@ahmed-VirtualBox:~/task4$ gcc global.c -o global
+ahmed@ahmed-VirtualBox:~/task4$ ./global
+Global Page Faults: 4
+ahmed@ahmed-VirtualBox:~/task4$
