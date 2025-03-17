@@ -1,0 +1,33 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <dirent.h>
+
+void list_directory(const char *dirname) {
+    DIR *dir = opendir(dirname);
+    if (!dir) {
+        perror("opendir");
+        return;
+    }
+   
+    struct dirent *entry;
+    printf("Contents of directory: %s\n", dirname);
+    while ((entry = readdir(dir)) != NULL) {
+        printf("%s\n", entry->d_name);
+    }
+   
+    closedir(dir);
+    printf("\n");
+}
+
+int main(int argc, char *argv[]) {
+    if (argc < 2) {
+        fprintf(stderr, "Usage: %s <directory> [<directory> ...]\n", argv[0]);
+        return EXIT_FAILURE;
+    }
+   
+    for (int i = 1; i < argc; i++) {
+        list_directory(argv[i]);
+    }
+   
+    return EXIT_SUCCESS;
+}

@@ -1,0 +1,28 @@
+ahmed@ahmed-VirtualBox:~/task5$ cd
+ahmed@ahmed-VirtualBox:~$ cd task6
+ahmed@ahmed-VirtualBox:~/task6$ gcc task6.c -o output
+ahmed@ahmed-VirtualBox:~/task6$ ./output /home
+Contents of directory: /home
+.
+..
+ahmed
+
+ahmed@ahmed-VirtualBox:~/task6$ ./output /task6
+opendir: No such file or directory
+ahmed@ahmed-VirtualBox:~/task6$ cd
+ahmed@ahmed-VirtualBox:~$ gcc task6.c -o output
+gcc: error: task6.c: No such file or directory
+gcc: fatal error: no input files
+compilation terminated.
+ahmed@ahmed-VirtualBox:~$ cd task6
+ahmed@ahmed-VirtualBox:~/task6$ gcc task6.c -o output
+ahmed@ahmed-VirtualBox:~/task6$ ./output /home/task5
+opendir: No such file or directory
+ahmed@ahmed-VirtualBox:~/task6$ ./output /home/ahmed/task5
+Contents of directory: /home/ahmed/task5
+.
+output
+task5.c
+..
+
+ahmed@ahmed-VirtualBox:~/task6$
