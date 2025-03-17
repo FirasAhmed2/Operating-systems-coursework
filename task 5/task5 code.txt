@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <string.h>
+
+#define MAX_BINS 1000  // Adjust as needed
+
+int histogram[MAX_BINS] = {0};
+int bin_width;
+
+void process_file(const char *filepath) {
+    struct stat file_stat;
+    if (stat(filepath, &file_stat) == 0 && S_ISREG(file_stat.st_mode)) {
+        int bin = file_stat.st_size / bin_width;
+        if (bin < MAX_BINS) {
+            histogram[bin]++;
+        }
+    }
+}
+
+void traverse_directory(const char *dirpath) {
+    struct dirent *entry;
+    DIR *dir = opendir(dirpath);
+    if (!dir) {
+        perror("opendir failed");
+        return;
+    }
+
+    while ((entry = readdir(dir)) != NULL) {
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+            continue;
+
+        char path[1024];
+        snprintf(path, sizeof(path), "%s/%s", dirpath, entry->d_name);
+
+        struct stat entry_stat;
+        if (stat(path, &entry_stat) == 0) {
+            if (S_ISDIR(entry_stat.st_mode)) {
+                traverse_directory(path);
+            } else if (S_ISREG(entry_stat.st_mode)) {
+                process_file(path);
+            }
+        }
+    }
+    closedir(dir);
+}
+
+void print_histogram() {
+    printf("File Size Histogram (bin width = %d bytes):\n", bin_width);
+    for (int i = 0; i < MAX_BINS; i++) {
+        if (histogram[i] > 0) {
+            printf("%d - %d: %d files\n", i * bin_width, (i + 1) * bin_width - 1, histogram[i]);
+        }
+    }
+}
+
+int main(int argc, char *argv[]) {
+    if (argc != 3) {
+        fprintf(stderr, "Usage: %s <directory> <bin_width>\n", argv[0]);
+        return 1;
+    }
+
+    bin_width = atoi(argv[2]);
+    if (bin_width <= 0) {
+        fprintf(stderr, "Invalid bin width\n");
+        return 1;
+    }
+
+    traverse_directory(argv[1]);
+    print_histogram();
+
+    return 0;
+}
