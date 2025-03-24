@@ -1,0 +1,156 @@
+ahmed@ahmed-VirtualBox:~/task5$ ^C
+ahmed@ahmed-VirtualBox:~/task5$ cd
+ahmed@ahmed-VirtualBox:~$ cd task9
+ahmed@ahmed-VirtualBox:~/task9$ gcc task9.c -o output
+ahmed@ahmed-VirtualBox:~/task9$ ./output
+ID Arrival Burst Waiting Turnaround
+1 0 5 0 5
+2 1 3 4 7
+3 2 8 6 14
+4 3 6 13 19
+5 4 2 18 20
+ahmed@ahmed-VirtualBox:~/task9$ gcc task9.c -o output
+ahmed@ahmed-VirtualBox:~/task9$ ./output
+ID Arrival Burst Waiting Turnaround
+1 0 5 0 5
+2 1 3 4 7
+3 2 8 6 14
+4 3 6 13 19
+5 4 2 18 20
+ahmed@ahmed-VirtualBox:~/task9$ gcc task9.c -o output
+task9.c: In function ‘main’:
+task9.c:73:52: error: expected ‘;’ before ‘return’
+   73 |     SJF(id, arrival, burst, waiting, turnaround, n)
+      |                                                    ^
+      |                                                    ;
+   74 |     return 0;
+      |     ~~~~~~                                          
+ahmed@ahmed-VirtualBox:~/task9$ gcc task9.c -o output
+ahmed@ahmed-VirtualBox:~/task9$ ./output
+ID Arrival Burst Waiting Turnaround
+1 0 5 0 5
+2 1 3 4 7
+3 2 8 6 14
+4 3 6 13 19
+5 4 2 18 20
+ID Arrival Burst Waiting Turnaround
+1 0 5 0 5
+2 1 3 6 9
+3 2 8 14 22
+4 3 6 7 13
+5 4 2 1 3
+ahmed@ahmed-VirtualBox:~/task9$ gcc task9.c -o output
+task9.c: In function ‘main’:
+task9.c:71:30: error: expected ‘;’ before ‘FCFS’
+   71 |     printf("FCFS SCHEDULING")
+      |                              ^
+      |                              ;
+   72 |     FCFS(id, arrival, burst, waiting, turnaround, n);
+      |     ~~~~                      
+task9.c:73:29: error: expected ‘;’ before ‘SJF’
+   73 |     printf("SJF SCHEDULING")
+      |                             ^
+      |                             ;
+   74 |     SJF(id, arrival, burst, waiting, turnaround, n);
+      |     ~~~                      
+ahmed@ahmed-VirtualBox:~/task9$ gcc task9.c -o output
+ahmed@ahmed-VirtualBox:~/task9$ ./output
+FCFS SCHEDULINGID Arrival Burst Waiting Turnaround
+1 0 5 0 5
+2 1 3 4 7
+3 2 8 6 14
+4 3 6 13 19
+5 4 2 18 20
+SJF SCHEDULINGID Arrival Burst Waiting Turnaround
+1 0 5 0 5
+2 1 3 6 9
+3 2 8 14 22
+4 3 6 7 13
+5 4 2 1 3
+ahmed@ahmed-VirtualBox:~/task9$ gcc task9.c -o output
+task9.c: In function ‘main’:
+task9.c:71:29: error: stray ‘\’ in program
+   71 |     printf("FCFS SCHEDULING"\n);
+      |                             ^
+task9.c:71:29: error: expected ‘)’ before ‘n’
+   71 |     printf("FCFS SCHEDULING"\n);
+      |                             ^~
+      |                             )
+task9.c:73:28: error: stray ‘\’ in program
+   73 |     printf("SJF SCHEDULING"\n);
+      |                            ^
+task9.c:73:28: error: expected ‘)’ before ‘n’
+   73 |     printf("SJF SCHEDULING"\n);
+      |                            ^~
+      |                            )
+ahmed@ahmed-VirtualBox:~/task9$ gcc task9.c -o output
+ahmed@ahmed-VirtualBox:~/task9$ ./output
+FCFS SCHEDULING
+ID Arrival Burst Waiting Turnaround
+1 0 5 0 5
+2 1 3 4 7
+3 2 8 6 14
+4 3 6 13 19
+5 4 2 18 20
+SJF SCHEDULING
+ID Arrival Burst Waiting Turnaround
+1 0 5 0 5
+2 1 3 6 9
+3 2 8 14 22
+4 3 6 7 13
+5 4 2 1 3
+ahmed@ahmed-VirtualBox:~/task9$ gcc task9.c -o output
+task9.c: In function ‘RR’:
+task9.c:66:9: error: ‘waiting’ redeclared as different kind of symbol
+   66 |     int waiting[n], turnaround[n];
+      |         ^~~~~~~
+task9.c:64:51: note: previous definition of ‘waiting’ was here
+   64 | void RR(int id[], int arrival[], int burst[], int waiting[], int turnaround[], int n){
+      |                                               ~~~~^~~~~~~~~
+task9.c:66:21: error: ‘turnaround’ redeclared as different kind of symbol
+   66 |     int waiting[n], turnaround[n];
+      |                     ^~~~~~~~~~
+task9.c:64:66: note: previous definition of ‘turnaround’ was here
+   64 | void RR(int id[], int arrival[], int burst[], int waiting[], int turnaround[], int n){
+      |                                                              ~~~~^~~~~~~~~~~~
+task9.c:80:36: error: ‘quantum’ undeclared (first use in this function)
+   80 |                 if (remaining[i] > quantum) {
+      |                                    ^~~~~~~
+task9.c:80:36: note: each undeclared identifier is reported only once for each function it appears in
+ahmed@ahmed-VirtualBox:~/task9$ gcc task9.c -o output
+task9.c: In function ‘RR’:
+task9.c:66:9: error: ‘waiting’ redeclared as different kind of symbol
+   66 |     int waiting[n], turnaround[n];
+      |         ^~~~~~~
+task9.c:64:51: note: previous definition of ‘waiting’ was here
+   64 | void RR(int id[], int arrival[], int burst[], int waiting[], int turnaround[], int n,int quantum){
+      |                                               ~~~~^~~~~~~~~
+task9.c:66:21: error: ‘turnaround’ redeclared as different kind of symbol
+   66 |     int waiting[n], turnaround[n];
+      |                     ^~~~~~~~~~
+task9.c:64:66: note: previous definition of ‘turnaround’ was here
+   64 | void RR(int id[], int arrival[], int burst[], int waiting[], int turnaround[], int n,int quantum){
+      |                                                              ~~~~^~~~~~~~~~~~
+ahmed@ahmed-VirtualBox:~/task9$ gcc task9.c -o output
+ahmed@ahmed-VirtualBox:~/task9$ ./output
+FCFS SCHEDULING
+ID Arrival Burst Waiting Turnaround
+1 0 5 0 5
+2 1 3 4 7
+3 2 8 6 14
+4 3 6 13 19
+5 4 2 18 20
+SJF SCHEDULING
+ID Arrival Burst Waiting Turnaround
+1 0 5 0 5
+2 1 3 6 9
+3 2 8 14 22
+4 3 6 7 13
+5 4 2 1 3
+Round robin scheduling
+ID Arrival Burst Waiting Turnaround
+1 0 5 13 18
+2 1 3 3 6
+3 2 8 12 20
+4 3 6 15 21
+5 4 2 11 13
